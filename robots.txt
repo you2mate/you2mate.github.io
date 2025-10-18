@@ -1,0 +1,18 @@
+# robots.txt für https://you2mate.github.io/
+
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /assets/
+Disallow: /private/
+Allow: /
+
+# Sitemap falls vorhanden (einfach anpassen)
+Sitemap: https://you2mate.github.io/sitemap.xml
+
+# Hinweise
+# - "Allow: /" erlaubt allen Bots, den Rest der Seite zu indexieren.
+# - Falls du willst, dass Suchmaschinen die Seite *nicht* indexieren:
+#   ersetze alles durch:
+#   User-agent: *
+#   Disallow: /
