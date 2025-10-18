@@ -1,16 +1,67 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="You2mate - Free YouTube Video Downloader. Download YouTube videos in MP4 or convert to MP3 audio format. Fast, free, and easy to use." />
-    <title>You2mate - Free YouTube Video Downloader</title>
-    <script type="module" crossorigin src="/assets/index-BUeAuZvB.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Bj9j33Az.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
-</html>
 
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vollbild Embed</title>
+  <style>
+    html,body{height:100%;margin:0}
+    body{display:flex;flex-direction:column;background:#000}
+    /* Container füllt das komplette Fenster */
+    #toolbar{display:flex;gap:8px;padding:8px;background:rgba(0,0,0,0.45);align-items:center}
+    #toolbar button{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
+    #frame{flex:1;position:relative}
+    iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    /* Fallback-Hinweis, falls Embedding geblockt wird */
+    .fallback{display:none;color:#fff;padding:20px;text-align:center}
+    .visible{display:block}
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <button id="fsBtn" title="Vollbild (F)">Vollbild an/aus</button>
+    <button id="openBtn" title="In neuem Tab öffnen">In neuem Tab öffnen</button>
+    <div style="flex:1"></div>
+    <small style="color:#ddd">Embedded: lnh8imcejw33.manus.space</small>
+  </div>  <div id="frame">
+    <iframe id="embed" src="https://lnh8imcejw33.manus.space/" allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe><div id="fallback" class="fallback">
+  <p>Die Seite konnte nicht eingebettet werden (möglicherweise blockiert durch X-Frame-Options oder Content-Security-Policy).</p>
+  <p><a id="fallbackLink" href="https://lnh8imcejw33.manus.space/" target="_blank" rel="noopener">Seite in neuem Tab öffnen</a></p>
+</div>
+
+  </div>  <script>
+    const iframe = document.getElementById('embed');
+    const fallback = document.getElementById('fallback');
+    const fsBtn = document.getElementById('fsBtn');
+    const openBtn = document.getElementById('openBtn');
+
+    // Prüfen, ob die Seite geladen ist — nach einer kurzen Wartezeit Fallback anzeigen
+    let loaded = false;
+    iframe.addEventListener('load', ()=>{ loaded = true; fallback.classList.remove('visible'); });
+
+    // Falls iframe-Load aus Sicherheitsgründen blockiert wird, zeigen wir nach 1.5s den Fallback
+    setTimeout(()=>{ if(!loaded){ fallback.classList.add('visible'); } }, 1500);
+
+    // Vollbild umschalten
+    async function toggleFullscreen(){
+      const el = document.documentElement;
+      if (!document.fullscreenElement){
+        try{ await el.requestFullscreen(); }
+        catch(e){ console.warn('Fullscreen nicht erlaubt:', e); }
+      } else {
+        try{ await document.exitFullscreen(); }
+        catch(e){ console.warn('Exit fullscreen failed', e); }
+      }
+    }
+
+    fsBtn.addEventListener('click', toggleFullscreen);
+    openBtn.addEventListener('click', ()=> window.open(iframe.src, '_blank', 'noopener'));
+
+    // Shortcut: Taste F toggelt Vollbild
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'f' || e.key === 'F') toggleFullscreen(); });
+
+    // Wenn das Embed durch den Server verweigert wird, können wir alternativ die Seite per redirect im Top-Level öffnen
+    // Hinweis: Viele Sites erlauben Embedding nicht — dann nutzt der Nutzer am besten den "In neuem Tab öffnen"-Button.
+  </script></body>
+</html>
